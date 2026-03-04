@@ -1,0 +1,12 @@
+[package]
+name = "dragon-dns"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+chrono = "0.4.44"                                            # Time-related utilities
+cloudflare = { version = "0.14.0", features = ["blocking"] } # Cloudflare API
+croner = "3.0.1"                                             # Cron parsing
+dotenvy = "0.15.7"                                           # .env parsing
+humantime = "2.3.0"                                          # Human-time parsing
+reqwest = { version = "0.13.1", features = ["blocking"] }    # Web-requests
