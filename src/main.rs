@@ -139,6 +139,8 @@ impl App {
                 content: DnsContent::A {
                     content: self.cached_ip4,
                 },
+                comment: record.comment.as_deref(),
+                tags: Some(&record.tags),
             },
         };
 

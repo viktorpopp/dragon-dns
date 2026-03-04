@@ -121,9 +121,8 @@ dependencies = [
 
 [[package]]
 name = "cloudflare"
-version = "0.14.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1678b3295890df5895480a7c080430e73df2b7101f1763f62a3b32dd532f1d37"
+version = "0.14.1"
+source = "git+https://github.com/viktorpopp/cloudflare-rs.git#20555a95892ec9eb3f4fcbf8af68d475881f81b2"
 dependencies = [
  "chrono",
  "http",
