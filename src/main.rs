@@ -92,6 +92,7 @@ struct App {
     cached_last_time: DateTime<Local>,
     cached_ip4: Ipv4Addr,
     update_cron: Cron,
+    machine_id: String,
     api_client: HttpApiClient,
 }
 
@@ -121,6 +122,8 @@ impl App {
             let records = list_records(&self.api_client, &zone.id);
             for record in records {
                 if self.ip4_domains.contains(&record.name) {
+                    self.update_ip4_record(&zone, &record);
+                } else if self.machine_id != String::new() && record.comment.clone().unwrap().contains(format!("DDNS_ID={}", &self.machine_id).as_str()) {
                     self.update_ip4_record(&zone, &record);
                 }
             }
@@ -160,6 +163,7 @@ fn main() -> Result<(), Box<dyn Error>> {
     let mut ip4_domains: Vec<String> = vec![];
     let mut cache_expiration = Duration::from_hours(6);
     let mut update_cron: Cron = Cron::from_str("* * * * *")?;
+    let mut machine_id = String::new();
 
     for (key, val) in env::vars() {
         match key.as_str() {
@@ -176,6 +180,7 @@ fn main() -> Result<(), Box<dyn Error>> {
                     .expect("failed to parse CACHE_EXPIRATION")
             }
             "UPDATE_CRON" => update_cron = Cron::from_str(&key)?,
+            "MACHINE_ID" => machine_id = val.clone(),
             _ => {}
         }
     }
@@ -196,6 +201,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         cached_last_time: DateTime::default(),
         cached_ip4: Ipv4Addr::new(0, 0, 0, 0),
         update_cron,
+        machine_id,
         api_client: HttpApiClient::new(
             credentials,
             ClientConfig::default(),
