@@ -21,9 +21,3 @@ clients pick one at random without a dedicated load balancer.
 - [ ] Documentation
 - [ ] IPv6 Support
 - [ ] Docker Image
-- [x] API Token Verification
-- [ ] More Configuration Options
-- [ ] Improved Logging
-- [ ] Improved Error Handling
-- [ ] Error Notifications
-- [ ] Token Expiration Warnings
