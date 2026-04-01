@@ -1,0 +1,9 @@
+services:
+  dragon-dns:
+    image: ghcr.io/zinix-org/dragon-dns:main
+    container_name: ddns
+    environment:
+      - CLOUDFLARE_API_TOKEN=cfut_UcPVe1OUS0mX7Y4iw6OqfxQEw85yxZWLGI6W4IrFe2353557
+      - MACHINE_ID=1
+      - LOG_LEVEL=trace
+      - CACHE_EXPIRATION=1m

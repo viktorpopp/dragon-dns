@@ -209,7 +209,7 @@ fn main() -> Result<(), Box<dyn Error>> {
                     .parse::<humantime::Duration>()
                     .expect("failed to parse CACHE_EXPIRATION")
             }
-            "UPDATE_CRON" => update_cron = Cron::from_str(&key)?,
+            "UPDATE_CRON" => update_cron = Cron::from_str(&val)?,
             "MACHINE_ID" => machine_id = val.clone(),
             "LOG_LEVEL" => logger::set_level(match val.to_lowercase().as_str() {
                 "error" => log::Level::Error,
