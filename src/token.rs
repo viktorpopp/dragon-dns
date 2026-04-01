@@ -16,6 +16,7 @@
 
 use reqwest::header::AUTHORIZATION;
 use serde::Deserialize;
+use std::error::Error;
 
 #[derive(Debug, Deserialize)]
 pub struct TokenVerificationResult {
@@ -27,7 +28,7 @@ pub struct TokenVerificationResponse {
     result: Option<TokenVerificationResult>,
 }
 
-pub fn verify_token(token: &str) {
+pub fn verify_token(token: &str) -> Result<(), Box<dyn Error>> {
     let client = reqwest::blocking::Client::new();
     let res_raw = client
         .get("https://api.cloudflare.com/client/v4/user/tokens/verify")
@@ -40,19 +41,13 @@ pub fn verify_token(token: &str) {
         serde_json::from_str(&res_raw).expect("failed to parse JSON");
 
     if res.result.is_none() {
-        panic!("the CLOUDFLARE_API_TOKEN used is not valid");
+        return Err("the CLOUDFLARE_API_TOKEN used is not valid".into());
     }
 
     match res.result.unwrap().status.as_str() {
-        "active" => {}
-        "disabled" => {
-            panic!("the CLOUDFLARE_API_TOKEN used is disabled");
-        }
-        "expired" => {
-            panic!("the CLOUDFLARE_API_TOKEN used is expired");
-        }
-        _ => {
-            panic!("the CLOUDFLARE_API_TOKEN used is not valid");
-        }
+        "active" => Ok(()),
+        "disabled" => Err("the CLOUDFLARE_API_TOKEN used is disabled".into()),
+        "expired" => Err("the CLOUDFLARE_API_TOKEN used is expired".into()),
+        _ => Err("the CLOUDFLARE_API_TOKEN used is not valid".into()),
     }
 }
