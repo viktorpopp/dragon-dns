@@ -227,7 +227,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         return Err("could not find CLOUDFLARE_API_TOKEN variable in environment".into());
     }
 
-    verify_token(&token);
+    verify_token(&token)?;
 
     let credentials = Credentials::UserAuthToken {
         token: token.clone(),
