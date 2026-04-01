@@ -55,7 +55,7 @@ fn get_ip4() -> Ipv4Addr {
         .expect("failed to pass IP address")
 }
 
-fn list_zones(api_client: &HttpApiClient) -> Result<Vec<Zone>, String> {
+fn list_zones(api_client: &HttpApiClient) -> Vec<Zone> {
     let endpoint = ListZones {
         params: ListZonesParams {
             name: None,
@@ -71,12 +71,12 @@ fn list_zones(api_client: &HttpApiClient) -> Result<Vec<Zone>, String> {
     let response = api_client.request(&endpoint);
 
     match response {
-        Ok(success) => Ok(success.result),
-        Err(error) => Err(format!("failed to list zones: {:#?}", error)),
+        Ok(success) => success.result,
+        Err(error) => panic!("failed to list zones: {:#?}", error),
     }
 }
 
-fn list_records(api_client: &HttpApiClient, id: &str) -> Result<Vec<DnsRecord>, String> {
+fn list_records(api_client: &HttpApiClient, id: &str) -> Vec<DnsRecord> {
     let endpoint = ListDnsRecords {
         zone_identifier: id,
         params: ListDnsRecordsParams {
@@ -93,11 +93,8 @@ fn list_records(api_client: &HttpApiClient, id: &str) -> Result<Vec<DnsRecord>, 
     let response = api_client.request(&endpoint);
 
     match response {
-        Ok(success) => Ok(success.result),
-        Err(error) => Err(format!(
-            "failed to list DNS records from {}: {:#?}",
-            id, error
-        )),
+        Ok(success) => success.result,
+        Err(error) => panic!("failed to list DNS records from {}: {:#?}", id, error),
     }
 }
 
@@ -132,9 +129,9 @@ impl App {
     }
 
     fn update_records(&mut self) -> Result<(), Box<dyn Error>> {
-        let zones = list_zones(&self.api_client)?;
+        let zones = list_zones(&self.api_client);
         for zone in zones {
-            let records = list_records(&self.api_client, &zone.id)?;
+            let records = list_records(&self.api_client, &zone.id);
             for record in records {
                 if self.ip4_domains.contains(&record.name)
                     || (self.machine_id != String::new()
@@ -144,14 +141,14 @@ impl App {
                             .unwrap()
                             .contains(format!("DDNS_ID={}", &self.machine_id).as_str()))
                 {
-                    self.update_ip4_record(&zone, &record)?;
+                    self.update_ip4_record(&zone, &record);
                 }
             }
         }
         Ok(())
     }
 
-    fn update_ip4_record(&mut self, zone: &Zone, record: &DnsRecord) -> Result<(), &str> {
+    fn update_ip4_record(&mut self, zone: &Zone, record: &DnsRecord) {
         let endpoint = UpdateDnsRecord {
             zone_identifier: &zone.id,
             identifier: &record.id,
@@ -170,8 +167,8 @@ impl App {
         let response = self.api_client.request(&endpoint);
 
         match response {
-            Ok(_) => Ok(()),
-            Err(_) => Err("failed to update DNS record"),
+            Ok(_) => {}
+            Err(_) => panic!("failed to update DNS record"),
         }
     }
 }
