@@ -1,6 +1,6 @@
 services:
   dragon-dns:
-    build: .
+    image: ghcr.io/zinix-org/dragon-dns:main
     container_name: ddns
     environment:
       - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
