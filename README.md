@@ -1,7 +1,7 @@
 # DragonDNS
 
 > [!CAUTION]
-> A rewrite is currently going on over on the [rewrite](https://github.com/viktorpopp/dragon-dns/tree/rewrite) branch.
+> A rewrite is currently being done. 
 
 DragonDNS is an self-hosted Dynamic DNS service that can be configured on the server itself and the Cloudflare
 Dashboard in the DNS entry comments.
