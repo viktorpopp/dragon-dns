@@ -4,14 +4,3 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-chrono = "0.4.44" # Time-related utilities
-cloudflare = { git = "https://github.com/viktorpopp/cloudflare-rs.git", features = [
-    "blocking",
-] } # Cloudflare API
-croner = "3.0.1" # Cron parsing
-dotenvy = "0.15.7" # .env parsing
-humantime = "2.3.0" # Human-time parsing
-log = { version = "0.4.29", features = ["std"] } # Logging
-reqwest = { version = "0.13.1", features = ["blocking"] } # Web-requests
-serde = { version = "1.0.228", features = ["derive"] } # Markup parsing
-serde_json = "1.0.149" # JSON parsing
