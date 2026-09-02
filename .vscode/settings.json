@@ -1,4 +1,4 @@
 {
-    "chat.disableAIFeatures": true,
-    "editor.formatOnSave": true
+  "chat.disableAIFeatures": true,
+  "editor.formatOnSave": true
 }

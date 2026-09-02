@@ -1,2 +1,6 @@
+# Rust/Cargo outputs
 /target
+
+# Environment variables
 *.env*
+!.env.example
