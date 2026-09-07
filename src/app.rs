@@ -22,14 +22,14 @@ use cloudflare::{
 use color_eyre::Result;
 use std::net::Ipv4Addr;
 use tokio::time::sleep;
-use tracing::{debug, info};
+use tracing::{debug, info, trace};
 
 pub struct App {
     api_client: CloudflareClient,
     config: RuntimeConfig,
 
     cached_ip4: Ipv4Addr,
-    cached_last_time: DateTime<Local>,
+    updated_last_time: DateTime<Local>,
 }
 
 impl App {
@@ -46,7 +46,7 @@ impl App {
             )?,
             config,
             cached_ip4: Ipv4Addr::new(0, 0, 0, 0),
-            cached_last_time: DateTime::default(),
+            updated_last_time: DateTime::default(),
         })
     }
 
@@ -63,14 +63,21 @@ impl App {
 
             let ip4 = get_ip4().await?;
 
-            if ip4 != self.cached_ip4
-                || now - self.cached_last_time > TimeDelta::from(self.config.cache_ttl)
-            {
+            let ip_changed = ip4 != self.cached_ip4;
+            let cache_expired = now - self.updated_last_time >= self.config.cache_ttl;
+
+            if ip_changed || cache_expired {
                 tracing::info!("updating with the IP: {}", ip4);
+                tracing::debug!("next scheduled cron: {}", next);
+
                 self.cached_ip4 = ip4;
-                self.cached_last_time = now;
+                self.updated_last_time = now;
+
                 self.update_records().await?;
+            } else {
+                trace!("not updating");
             }
+
             sleep((next - now).to_std()?).await;
         }
     }

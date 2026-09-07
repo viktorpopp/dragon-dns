@@ -31,6 +31,6 @@ mod defaults {
 
     pub fn update_cron() -> Cron {
         // TODO: Don't use `unwrap`.
-        Cron::from_str("*/2 * * * *").unwrap()
+        Cron::from_str("* * * * *").unwrap()
     }
 }
