@@ -89,7 +89,7 @@ impl App {
                 "expired" => Err(AppError::InvalidToken("expired".into()))?,
                 _ => todo!(),
             },
-            Err(_) => todo!(),
+            Err(e) => panic!("{:#?}", e),
         }
     }
 
