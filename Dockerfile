@@ -30,7 +30,7 @@ COPY . .
 RUN cargo build --release --locked
 
 #
-# Download
+# Download runtime dependencies and set the entrypoint
 #
 FROM debian:trixie-slim AS runtime
 RUN apt-get update &&                                           \

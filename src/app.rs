@@ -70,10 +70,10 @@ impl App {
                 tracing::info!("updating with the IP: {}", ip4);
                 tracing::debug!("next scheduled cron: {}", next);
 
+                self.update_records().await?;
+
                 self.cached_ip4 = ip4;
                 self.updated_last_time = now;
-
-                self.update_records().await?;
             } else {
                 trace!("not updating");
             }
