@@ -3,7 +3,7 @@ use crate::{
     error::AppError,
     utils::{format_duration, get_ip4},
 };
-use chrono::{DateTime, Local, TimeDelta};
+use chrono::{DateTime, Local};
 use cloudflare::{
     endpoints::{
         account::user::GetUserTokenStatus,
