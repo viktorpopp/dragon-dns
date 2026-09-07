@@ -32,7 +32,7 @@ You can change the following environment variables to customize the behavior of 
 | ------------- | ------------------------------------------------------------------------------------------ | ----------- |
 | `TOKEN`       | Your Cloudflare API token. Needs the `DNS: Edit` permission.                               | None        |
 | `MACHINE_ID`  | ID for updating records, identified by having `DDNS_ID=<MACHINE_ID>` in a records comment. | None        |
-| `UPDATE_CRON` | Cron expression for when to look for IP address changes. Parse by the [`croner`] crate     | `* * * * *` |
+| `UPDATE_CRON` | Cron expression for when to look for IP address changes. Parsed by the [`croner`] crate.   | `* * * * *` |
 
 All variables without a default value is required.
 
