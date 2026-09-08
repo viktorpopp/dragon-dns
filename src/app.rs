@@ -68,15 +68,13 @@ impl App {
 
             if ip_changed || cache_expired {
                 tracing::info!("updating with the IP: {}", ip4);
-                tracing::debug!("next scheduled cron: {}", next);
+                tracing::debug!("next scheduled update: {}", next);
 
                 self.cached_ip4 = ip4;
 
                 self.update_records().await?;
 
                 self.updated_last_time = now;
-            } else {
-                trace!("not updating");
             }
 
             sleep((next - now).to_std()?).await;
@@ -90,7 +88,7 @@ impl App {
         match res {
             Ok(status) => match status.result.status.as_str() {
                 "active" => {
-                    info!("successfully verified API token");
+                    debug!("successfully verified API token");
                     Ok(())
                 }
                 "disabled" => Err(AppError::InvalidToken("disabled".into()))?,
@@ -146,6 +144,15 @@ impl App {
                     _ => todo!(),
                 }
             };
+
+            trace!(
+                "fetched records [ {} ]",
+                records
+                    .iter()
+                    .map(|r| r.name.as_str())
+                    .collect::<Vec<&str>>()
+                    .join(", ")
+            );
 
             for record in records {
                 if !self.config.machine_id.is_empty()

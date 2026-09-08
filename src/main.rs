@@ -10,9 +10,11 @@ mod utils;
 #[tokio::main]
 async fn main() -> Result<()> {
     color_eyre::install()?;
+
     if Path::new(".env").exists() {
         dotenvy::dotenv()?;
     }
+
     tracing_subscriber::fmt()
         .with_env_filter(format!(
             "{},rustls_platform_verifier=info,reqwest=info,hyper_util=info,h2=info",
