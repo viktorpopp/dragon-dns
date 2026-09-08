@@ -70,9 +70,10 @@ impl App {
                 tracing::info!("updating with the IP: {}", ip4);
                 tracing::debug!("next scheduled cron: {}", next);
 
+                self.cached_ip4 = ip4;
+
                 self.update_records().await?;
 
-                self.cached_ip4 = ip4;
                 self.updated_last_time = now;
             } else {
                 trace!("not updating");
@@ -96,7 +97,7 @@ impl App {
                 "expired" => Err(AppError::InvalidToken("expired".into()))?,
                 _ => todo!(),
             },
-            Err(e) => panic!("{:#?}", e),
+            _ => todo!(),
         }
     }
 
@@ -175,9 +176,9 @@ impl App {
                         .await;
                     match res {
                         Ok(_) => {
-                            debug!("updated record {}", record.name);
+                            debug!("updated record {} -> {}", record.name, self.cached_ip4);
                         }
-                        _ => todo!(),
+                        Err(e) => panic!("failed to update record: {}", e),
                     }
                 }
             }
