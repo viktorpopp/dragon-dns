@@ -9,7 +9,7 @@ Setting up DragonDNS with Docker Compose is incredibly simple, and only takes 6 
 ```yaml
 services:
   dragon-dns:
-    image: ghcr.io/viktorpopp/dragon-dns:latest
+    image: ghcr.io/zinix-org/dragon-dns:latest
     container_name: dragon-dns # Optional, but recommended.
     environment:
       - TOKEN=<YOUR_CLOUDFLARE_TOKEN>
